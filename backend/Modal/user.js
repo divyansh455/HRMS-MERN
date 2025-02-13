@@ -6,8 +6,8 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true },
     role: { type: String, enum: ['Employee', 'Admin'], default: 'Employee' },
     department: { type: String },
-    salary: { type: Number, required: true },
-    joiningDate: { type: Date, required: true },
+    salary: { type: Number,   },
+    joiningDate: { type: Date,  },
     workingHours: { type: Number, default: 8 },
     leaves: { type: Number, default: 12 }
 }, { timestamps: true });

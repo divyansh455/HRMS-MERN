@@ -3,22 +3,22 @@ import AuthContext from "../context/AuthContext";
 import axios from "axios";
 
 const Login = () => {
-  const { login } = useContext(AuthContext);
+  // const { login } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/login`,
-        { email, password }
-      );
-      login(response.data.token);
-    } catch (err) {
-      setError("Invalid Credentials");
-    }
+    // try {
+    //   const response = await axios.post(
+    //     `${process.env.REACT_APP_API_URL}/auth/login`,
+    //     { email, password }
+    //   );
+    //   login(response.data.token);
+    // } catch (err) {
+    //   setError("Invalid Credentials");
+    // }
   };
 
   return (

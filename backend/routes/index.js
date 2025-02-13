@@ -8,6 +8,10 @@ router.get('/healthcheck', MainController.healthchecker);
 //  Home Route
 // router.get('/home', MainController.main);
 
+router.get('/heathcheck', async (req, res) => {
+    res.status(200).send({ message: 'Server is running' });
+})
+
 // ************************** User Management Routes **************************
 
 //  Create User
@@ -54,5 +58,56 @@ router.put('/leave/approve/:leaveId', MainController.approveLeave);
 
 //  Get User Leave History
 // router.get('/leave/:userId', MainController.getLeaveHistory);
+
+
+// Punch In API
+router.post("/checkin", async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid user ID" });
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset to midnight for date comparison
+
+    // Check if user has already punched in today
+    const existingRecord = await Attendance.findOne({
+      userId,
+      date: { $gte: today },
+    });
+
+    if (existingRecord) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Already checked in today." });
+    }
+
+    // Create new attendance entry
+    const newAttendance = new Attendance({
+      userId,
+      checkIn: new Date(),
+      status: "Present",
+    });
+
+    await newAttendance.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Punch In successful!",
+      data: newAttendance,
+    });
+  } catch (error) {
+    console.error("Error in Punch In:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Server Error", error: error.message });
+  }
+});
+
+
 
 module.exports = router;

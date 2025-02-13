@@ -12,17 +12,39 @@ module.exports.healthchecker = async(req , res)=>{
 
 
 
-const User = require('../Modal/user');
+const User = require('../Modal/user'); 
 
-exports.createUser = async (req, res) => {
-    try {
-        const user = new User(req.body);
-        await user.save();
-        res.status(201).json({ message: 'User created successfully', user });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+module.exports.createUser = async (req, res) => {
+  try {
+    console.log("API hit"); // Debugging log
+
+    const { email, password, name } = req.body; // Destructure request body
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(403).json({ message: "User already exists" });
     }
+
+    // Create new user
+    const newUser = await User.create({ email, password, name });
+
+    // Check if user was successfully created
+    if (!newUser) {
+      return res.status(500).json({ message: "Error while creating the user" });
+    }
+
+    // Send success response
+    return res.status(201).json({
+      message: "User created successfully",
+      user: newUser,
+    });
+  } catch (error) {
+    console.error("Error in createUser API:", error); // Log the error
+    res.status(500).json({ message: error.message });
+  }
 };
+
 
 
 

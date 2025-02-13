@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import AddEmployeeModal from "./employeeNestedComponent/addemployeemodal";
 
 const EmployeeManagement = () => {
   const [employees, setEmployees] = useState([]);
@@ -13,6 +14,7 @@ const EmployeeManagement = () => {
 
   return (
     <div className="p-6">
+      <AddEmployeeModal/>
       <h1 className="text-2xl font-semibold mb-4">Employee Management</h1>
       <table className="w-full bg-white shadow-md rounded-lg overflow-hidden">
         <thead>
